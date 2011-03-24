@@ -6,7 +6,6 @@ t = new twitter consumer_key: config.consumerKey, consumer_secret: config.consum
 
 friends = null
 
-userLists = {}
 
 watchStream = ->
 	t.stream 'user', (stream) ->
@@ -24,21 +23,23 @@ watchStream = ->
 
 
 getLists = (user, cb) ->
+	userLists = {}
 	currentListIndex = 0
 	listCount = 0
 
-	addMembers = (members) ->
+	addMembers = (id, members) ->
 		if members.statusCode
 			console.log "error", members
 			return
 		for member in members
 			userLists[id].push member.id
 		if currentListIndex == listCount
-			cb()
+			cb userLists
 
 	getMembers = (id) ->
 		console.log "get members"
-		t.getListMembers user, id, addMembers
+		t.getListMembers user, id, (members) ->
+			addMembers id, members
 
 	addLists = (lists) ->
 		listCount = lists.length
@@ -51,8 +52,8 @@ getLists = (user, cb) ->
 			getMembers list.id
 
 	t.getLists user, {}, addLists
-	return ""
 
 #watchStream()
-getLists "jgallen23", ->
+getLists "jgallen23", (userLists) ->
+	debugger
 	console.log "done"
