@@ -1,0 +1,3 @@
+[submodule "node-twitter"]
+	path = node-twitter
+	url = https://github.com/jdub/node-twitter.git
