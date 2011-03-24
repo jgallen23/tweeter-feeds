@@ -28,28 +28,28 @@ getLists = (user, cb) ->
 	listCount = 0
 
 	addMembers = (members) ->
+		if members.statusCode
+			console.log "error", members
+			return
 		for member in members
-			console.log member.id
 			userLists[id].push member.id
-		console.log currentListIndex
 		if currentListIndex == listCount
 			cb()
 
 	getMembers = (id) ->
+		console.log "get members"
 		t.getListMembers user, id, addMembers
 
 	addLists = (lists) ->
+		listCount = lists.length
 		if lists.statusCode
-			console.log "error"
+			console.log "error", lists
 			return
 		for list, i in lists
-			console.log "list"
 			currentListIndex = i + 1
 			userLists[list.id] = []
 			getMembers list.id
 
-	console.log t
-	console.log user
 	t.getLists user, {}, addLists
 	return ""
 
