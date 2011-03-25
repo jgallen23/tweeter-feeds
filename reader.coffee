@@ -11,9 +11,8 @@ db = new mongodb.Db "twitrss", new mongodb.Server "127.0.0.1", 27017
 client = null
 friends = null
 
-watchStream = (userLists) ->
+watchStream = ->
 	console.log "Start Watching Stream"
-	return
 
 	printTweet = (tweet) ->
 		console.log "#{ tweet.user.screen_name }: #{ tweet.text }"
@@ -26,6 +25,15 @@ watchStream = (userLists) ->
 				#tweet.listId = id
 
 		#save in mongo
+		data =
+			_id: tweet.id
+			text: tweet.text
+			user:
+				name: tweet.user.name
+				screen_name: tweet.user.screen_name
+				id: tweet.user.id
+		collection = new mongodb.Collection client, 'tweets'
+		collection.save data, (err, objects) ->
 		printTweet tweet
 
 	t.stream 'user', (stream) ->
@@ -48,9 +56,9 @@ getLists = (user, cb) ->
 	saveLists = ->
 		#save
 		collection = new mongodb.Collection client, 'user_lists'
-		l = name: user, lists: userLists
-		collection.insert l, safe: true, (err, objects) ->
-			cb userLists
+		l = _id: user, lists: userLists
+		collection.save l, (err, objects) ->
+			#cb userLists
 
 	addMembers = (id, members) ->
 		if members.statusCode
@@ -72,12 +80,13 @@ getLists = (user, cb) ->
 			console.log "error", lists
 			return
 		for list, i in lists
-			userLists[list.id] = list: list, users: []
+			userLists[list.id] = name: list.name, users: []
 			getMembers list.id
 
 	t.getLists user, {}, addLists
 
 db.open (error, c) ->
 	client = c
-	getLists "jgallen23", watchStream
+	#getLists "jgallen23"
+	watchStream()
 	
