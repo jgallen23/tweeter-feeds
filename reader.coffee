@@ -11,6 +11,18 @@ db = new mongodb.Db "twitrss", new mongodb.Server "127.0.0.1", 27017
 client = null
 friends = null
 
+saveTweet = (tweet) ->
+	data =
+		id: new client.bson_serializer.ObjectID tweet.id.toString()
+		text: tweet.text
+		created: tweet.created_at
+		user_name: tweet.user.name
+		user_screen_name: tweet.user.screen_name
+		user_id: tweet.user.id
+	collection = new mongodb.Collection client, 'tweets'
+	collection.save data, (err, objects) ->
+		console.log err, objects
+
 watchStream = ->
 	console.log "Start Watching Stream"
 
@@ -25,15 +37,7 @@ watchStream = ->
 				#tweet.listId = id
 
 		#save in mongo
-		data =
-			_id: tweet.id
-			text: tweet.text
-			user:
-				name: tweet.user.name
-				screen_name: tweet.user.screen_name
-				id: tweet.user.id
-		collection = new mongodb.Collection client, 'tweets'
-		collection.save data, (err, objects) ->
+		saveTweet tweet
 		printTweet tweet
 
 	t.stream 'user', (stream) ->
@@ -49,44 +53,44 @@ watchStream = ->
 
 getLists = (user, cb) ->
 	console.log "Getting user lists"
-	userLists = {}
-	currentListIndex = 0
-	listCount = 0
 
-	saveLists = ->
-		#save
-		collection = new mongodb.Collection client, 'user_lists'
-		l = _id: user, lists: userLists
-		collection.save l, (err, objects) ->
-			#cb userLists
-
-	addMembers = (id, members) ->
+	addMembers = (list, members) ->
 		if members.statusCode
 			console.log "error", members
 			return
 		for member in members
-			userLists[id].users.push member.id
-		currentListIndex++
-		if currentListIndex == listCount
-			saveLists()
+			list.users.push member.id
+		#save list
+		collection = new mongodb.Collection client, 'user_lists'
+		collection.save list, (err, objects) ->
+			#cb userLists
 
-	getMembers = (id) ->
-		t.getListMembers user, id, (members) ->
-			addMembers id, members
+
+	getMembers = (list) ->
+		t.getListMembers user, list.id, (members) ->
+			addMembers list, members
 
 	addLists = (lists) ->
-		listCount = lists.length
 		if lists.statusCode
 			console.log "error", lists
 			return
 		for list, i in lists
-			userLists[list.id] = name: list.name, users: []
-			getMembers list.id
+			ulist = owner: user, id: list.id, name: list.name, users: []
+			getMembers ulist
 
 	t.getLists user, {}, addLists
 
+getHomeTimeline = (cb) ->
+	console.log "Saving timeline"
+	saveTimeline = (timeline) ->
+		for tweet in timeline
+			saveTweet tweet
+
+	t.getHomeTimeline { count: 100 }, saveTimeline
+
 db.open (error, c) ->
 	client = c
-	#getLists "jgallen23"
-	watchStream()
+	getLists "jgallen23"
+	getHomeTimeline()
+	#watchStream()
 	
