@@ -3,7 +3,8 @@ startServer = ->
 	TweetDb = require("./tweetdb")
 	app = express.createServer()
 	db = null
-	app.configure () ->
+	port = 80
+	app.configure ->
 		app.use express.methodOverride()
 		app.use express.bodyParser()
 		app.use app.router
@@ -11,7 +12,13 @@ startServer = ->
 		app.set "views", "#{ __dirname }/templates"
 		app.set "view options", { layout: false }
 
+
+	app.configure "development", ->
+		port = 3000
 		app.use express.errorHandler { dumpExceptions: true, showStack: true }
+
+	app.configure "production", ->
+		app.use express.errorHandler()
 	 
 
 	app.get "/", (req, res) ->
