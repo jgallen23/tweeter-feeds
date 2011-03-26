@@ -8,15 +8,15 @@ rss(version="2.0")
         guid tweeterfeeds,#{user},#{listName},#{tweet._id}
         title 
           :cdata
-            #{tweet.user_screen_name} said #{tweet.text}
+            #{tweet.user_screen_name}: #{tweet.text}
         description
           :cdata
-            <div style="float: left">
-              <img src="#{tweet.user_avatar}" />
+            <div style="float: left; margin-right: 10px; width: 80px; text-align: center;">
+              <img src="#{tweet.user_avatar}" width="48" />
               <p>#{tweet.user_screen_name}</p>
             </div>
-            <p>
-              #{tweet.text}
-              #{tweet.created}<br/>
-            </p>
+            <div>
+              <p style="font-size: 18px;">#{tweet.text}</p>
+              <p>#{tweet.created}</p>
+            </div>
     - })

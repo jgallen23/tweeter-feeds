@@ -71,7 +71,7 @@ getHomeTimeline = (cb) ->
 		for tweet in timeline
 			db.addTweet tweet
 
-	t.getHomeTimeline { count: 100 }, saveTimeline
+	t.getHomeTimeline { count: 200 }, saveTimeline
 
 db.on "ready", ->
 	getLists "jgallen23"
