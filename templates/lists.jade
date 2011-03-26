@@ -3,8 +3,11 @@ html
   head
   body
     ul
-    - lists.forEach(function(item) {
-    - url = "/feeds/" + user + "/" + item.id
+      - url = "/feeds/" + user
+      li
+        a(href=url) All
+      - lists.forEach(function(item) {
+      - url = "/feeds/" + user + "/" + item.id
       li
         a(href=url) #{ item.name }
-    - })
+      - })

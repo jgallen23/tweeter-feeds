@@ -20,6 +20,7 @@ class TweetDb extends EventEmitter
 		collection = new mongodb.Collection @client, 'tweets'
 		collection.save data, (err, objects) ->
 	addList: (list) ->
+		list._id = list.id
 		collection = new mongodb.Collection @client, 'lists'
 		collection.save list, (err, objects) ->
 			#cb userLists

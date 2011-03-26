@@ -16,6 +16,9 @@ app.configure () ->
 	app.use express.errorHandler { dumpExceptions: true, showStack: true }
  
 
+app.get "/", (req, res) ->
+	res.end "Hi"
+
 app.get "/:user", (req, res) ->
 	user = req.params.user
 	db.getLists user, (results) ->
