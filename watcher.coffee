@@ -1,11 +1,12 @@
 sys = require "sys"
-config = require("./config").config
-#twitter = require 'twitter'
 twitter = require "./node-twitter"
 mongodb = require('mongodb')
 TweetDb = require("./tweetdb")
 
-t = new twitter consumer_key: config.consumerKey, consumer_secret: config.consumerSecret, access_token_key: config.oathToken, access_token_secret: config.oathSecret
+t = new twitter consumer_key: process.env.TWITTER_CONSUMER_KEY,
+	consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+	access_token_key: process.env.TWITTER_OATH_TOKEN,
+	access_token_secret: process.env.TWITTER_OATH_SECRET
 
 friends = null
 db = new TweetDb
