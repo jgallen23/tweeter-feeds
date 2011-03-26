@@ -46,7 +46,7 @@ startServer = ->
 
 	db = new TweetDb
 	db.on "ready", ->
-		app.listen 3000, "0.0.0.0"
+		app.listen port, "0.0.0.0"
 
 startWatcher = ->
 	require "./watcher"
