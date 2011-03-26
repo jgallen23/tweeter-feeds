@@ -3,25 +3,12 @@ config = require("./config").config
 #twitter = require 'twitter'
 twitter = require "./node-twitter"
 mongodb = require('mongodb')
+TweetDb = require("./tweetdb")
 
 t = new twitter consumer_key: config.consumerKey, consumer_secret: config.consumerSecret, access_token_key: config.oathToken, access_token_secret: config.oathSecret
 
-db = new mongodb.Db "twitrss", new mongodb.Server "127.0.0.1", 27017
-
-client = null
 friends = null
-
-saveTweet = (tweet) ->
-	data =
-		id: new client.bson_serializer.ObjectID tweet.id.toString()
-		text: tweet.text
-		created: tweet.created_at
-		user_name: tweet.user.name
-		user_screen_name: tweet.user.screen_name
-		user_id: tweet.user.id
-	collection = new mongodb.Collection client, 'tweets'
-	collection.save data, (err, objects) ->
-		console.log err, objects
+db = new TweetDb
 
 watchStream = ->
 	console.log "Start Watching Stream"
@@ -37,7 +24,7 @@ watchStream = ->
 				#tweet.listId = id
 
 		#save in mongo
-		saveTweet tweet
+		db.addTweet tweet
 		printTweet tweet
 
 	t.stream 'user', (stream) ->
@@ -61,9 +48,7 @@ getLists = (user, cb) ->
 		for member in members
 			list.users.push member.id
 		#save list
-		collection = new mongodb.Collection client, 'user_lists'
-		collection.save list, (err, objects) ->
-			#cb userLists
+		db.addList list
 
 
 	getMembers = (list) ->
@@ -84,13 +69,12 @@ getHomeTimeline = (cb) ->
 	console.log "Saving timeline"
 	saveTimeline = (timeline) ->
 		for tweet in timeline
-			saveTweet tweet
+			db.addTweet tweet
 
 	t.getHomeTimeline { count: 100 }, saveTimeline
 
-db.open (error, c) ->
-	client = c
+db.on "ready", ->
 	getLists "jgallen23"
 	getHomeTimeline()
-	#watchStream()
+	watchStream()
 	

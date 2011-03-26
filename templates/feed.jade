@@ -1,0 +1,22 @@
+rss(version="2.0")
+  channel
+    title #{user} - #{listName}
+    link= "http://tweeterfeeds.com"
+    - tweets.forEach(function(tweet) {
+      item 
+        pubDate= tweet.created
+        guid tweeterfeeds,#{user},#{listName},#{tweet._id}
+        title 
+          :cdata
+            #{tweet.user_screen_name} said #{tweet.text}
+        description
+          :cdata
+            <div style="float: left">
+              <img src="#{tweet.user_avatar}" />
+              <p>#{tweet.user_screen_name}</p>
+            </div>
+            <p>
+              #{tweet.text}
+              #{tweet.created}<br/>
+            </p>
+    - })

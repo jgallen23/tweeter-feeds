@@ -1,10 +1,9 @@
 express = require "express"
-Twit = require("./twit")
+TweetDb = require("./tweetdb")
 app = express.createServer()
 
 mongodb = require('mongodb')
-db = new mongodb.Db "twitrss", new mongodb.Server "127.0.0.1", 27017
-twit = null
+db = null
 
 app.configure () ->
 	app.use express.methodOverride()
@@ -17,19 +16,26 @@ app.configure () ->
 	app.use express.errorHandler { dumpExceptions: true, showStack: true }
  
 
-app.get "/:user/", (req, res) ->
+app.get "/:user", (req, res) ->
 	user = req.params.user
-	twit.getLists user, (results) ->
-		console.log results
+	db.getLists user, (results) ->
 		res.render "lists.jade", user: user, lists: results
 
-app.get "/rss/:user/:listId", (req, res) ->
+app.get "/feeds/:user", (req, res) ->
+	user = req.params.user
+	db.getTweets 40, (results) ->
+		res.render "feed.jade", user: user, tweets: results, listName: 'All Tweets'
+
+
+app.get "/feeds/:user/:listId", (req, res) ->
+	res.local "formatDate", (date) ->
+		return new Date(date).toISOString()
+
 	user = req.params.user
 	listId = parseInt req.params.listId, 10
-	twit.getTweetsFromList user, listId, (results) ->
-		res.render "rss.jade", user: user, tweets: results
+	db.getTweetsFromList user, listId, (list, results) ->
+		res.render "feed.jade", user: user, tweets: results, listName: list.name
 
-db.open (error, client) ->
-	twit = new Twit client
-	#getTweetsFromList "jgallen23", "ee", (results) ->
-	app.listen 3000
+db = new TweetDb
+db.on "ready", ->
+	app.listen 3000, "0.0.0.0"

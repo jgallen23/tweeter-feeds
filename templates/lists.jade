@@ -4,7 +4,7 @@ html
   body
     ul
     - lists.forEach(function(item) {
-    - url = "/rss/" + user + "/" + item.id
+    - url = "/feeds/" + user + "/" + item.id
       li
         a(href=url) #{ item.name }
     - })
