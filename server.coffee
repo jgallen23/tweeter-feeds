@@ -1,9 +1,10 @@
 startServer = ->
 	express = require "express"
-	TweetDb = require("./tweetdb")
+	TweetDb = require "./tweetdb"
 	app = express.createServer()
 	db = null
 	port = 80
+
 	app.configure ->
 		app.use express.methodOverride()
 		app.use express.bodyParser()
@@ -12,6 +13,12 @@ startServer = ->
 		app.set "views", "#{ __dirname }/templates"
 		app.set "view options", { layout: false }
 
+		app.helpers {
+			urlize: (str) ->
+				str = str.replace /(http:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
+				return str
+			}
+
 
 	app.configure "development", ->
 		port = 3000
@@ -19,7 +26,7 @@ startServer = ->
 
 	app.configure "production", ->
 		app.use express.errorHandler()
-	 
+
 
 	app.get "/", (req, res) ->
 		res.end "Hi"

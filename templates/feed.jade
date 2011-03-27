@@ -8,7 +8,7 @@ rss(version="2.0")
         guid tweeterfeeds,#{user},#{listName},#{tweet._id}
         title 
           :cdata
-            #{tweet.user_screen_name}: #{tweet.text}
+            #{tweet.user_screen_name}: !{urlize(tweet.text)}
         description
           :cdata
             <div style="float: left; margin-right: 10px; width: 80px; text-align: center;">
@@ -16,7 +16,7 @@ rss(version="2.0")
               <p>#{tweet.user_screen_name}</p>
             </div>
             <div>
-              <p style="font-size: 18px;">#{tweet.text}</p>
+              <p style="font-size: 18px;">!{urlize(tweet.text)}</p>
               <p>#{tweet.created}</p>
             </div>
     - })

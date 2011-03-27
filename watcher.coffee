@@ -12,7 +12,7 @@ watchStream = ->
 	console.log "Start Watching Stream"
 
 	printTweet = (tweet) ->
-		console.log "#{ tweet.user.screen_name }: #{ tweet.text }"
+		console.log "New Tweet: #{ tweet.user.screen_name }: #{ tweet.text }"
 
 	addTweet = (tweet) ->
 		#partOfList = false
@@ -58,7 +58,6 @@ getLists = (user, cb) ->
 			console.log "error", lists
 			return
 		for list, i in lists
-			console.log list.name
 			ulist = owner: user, id: list.id, name: list.name, users: []
 			getMembers ulist
 
