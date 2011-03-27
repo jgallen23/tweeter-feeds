@@ -1,82 +1,83 @@
 startServer = ->
-	nub = require "./nubnub/src/server"
-	express = require "express"
-	TweetDb = require "./tweetdb"
-	app = express.createServer()
-	db = null
-	port = 80
+  nub = require "./nubnub/src/server"
+  express = require "express"
+  TweetDb = require "./tweetdb"
+  app = express.createServer()
+  db = null
+  port = 80
 
-	app.configure ->
-		app.use express.methodOverride()
-		app.use express.bodyParser()
-		app.use app.router
+  app.configure ->
+    app.use express.logger()
+    app.use express.methodOverride()
+    app.use express.bodyParser()
+    app.use app.router
 
-		app.set "views", "#{ __dirname }/templates"
-		app.set "view options", { layout: false }
+    app.set "views", "#{ __dirname }/templates"
+    app.set "view options", { layout: false }
 
-		app.helpers {
-			urlize: (str) ->
-				str = str.replace /(http:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
-				return str
-			}
-
-
-	app.configure "development", ->
-		port = 3000
-		app.use express.errorHandler { dumpExceptions: true, showStack: true }
-
-	app.configure "production", ->
-		app.use express.errorHandler()
+    app.helpers {
+      urlize: (str) ->
+        str = str.replace /(http:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
+        return str
+      }
 
 
-	app.get "/", (req, res) ->
-		res.end "Hi"
+  app.configure "development", ->
+    port = 3000
+    app.use express.errorHandler { dumpExceptions: true, showStack: true }
 
-	app.all "/hub", (req, res) ->
-		console.log req.rawBody
-		sub = nub.subscribe req.rawBody
-		console.log sub
-		sub.check_verification (err, resp) ->
-			if err
-				console.log "HUB: Error with validation: #{err}"
-			else
-				console.log "HUB: Success"
-
-			return
-			sub.publish [{abc: 1}], {format: 'json'}, (err, resp) ->
-				if err
-					console.log "SERVER: Error with publishing:"
-					console.log err
-				else
-					console.log "SERVER: Publishing successful!"
-
-	app.get "/:user", (req, res) ->
-		user = req.params.user
-		db.getLists user, (results) ->
-			res.render "lists.jade", user: user, lists: results
-
-	app.get "/feeds/:user", (req, res) ->
-		user = req.params.user
-		db.getTweets 40, (results) ->
-			res.render "feed.jade", user: user, tweets: results, listName: 'All Tweets'
+  app.configure "production", ->
+    app.use express.errorHandler()
 
 
-	app.get "/feeds/:user/:listId", (req, res) ->
-		res.local "formatDate", (date) ->
-			return new Date(date).toISOString()
+  app.get "/", (req, res) ->
+    res.end "Hi"
 
-		user = req.params.user
-		listId = parseInt req.params.listId, 10
-		db.getTweetsFromList user, listId, (list, results) ->
-			res.render "feed.jade", user: user, tweets: results, listName: list.name
+  app.all "/hub", (req, res) ->
+    console.log req.rawBody
+    sub = nub.subscribe req.rawBody
+    console.log sub
+    sub.check_verification (err, resp) ->
+      if err
+        console.log "HUB: Error with validation: #{err}"
+      else
+        console.log "HUB: Success"
+
+      return
+      sub.publish [{abc: 1}], {format: 'json'}, (err, resp) ->
+        if err
+          console.log "SERVER: Error with publishing:"
+          console.log err
+        else
+          console.log "SERVER: Publishing successful!"
+
+  app.get "/:user", (req, res) ->
+    user = req.params.user
+    db.getLists user, (results) ->
+      res.render "lists.jade", user: user, lists: results
+
+  app.get "/feeds/:user", (req, res) ->
+    user = req.params.user
+    db.getTweets 40, (results) ->
+      res.render "feed.jade", user: user, tweets: results, listName: 'All Tweets'
 
 
-	db = new TweetDb
-	db.on "ready", ->
-		app.listen port, "0.0.0.0"
+  app.get "/feeds/:user/:listId", (req, res) ->
+    res.local "formatDate", (date) ->
+      return new Date(date).toISOString()
+
+    user = req.params.user
+    listId = parseInt req.params.listId, 10
+    db.getTweetsFromList user, listId, (list, results) ->
+      res.render "feed.jade", user: user, tweets: results, listName: list.name
+
+
+  db = new TweetDb
+  db.on "ready", ->
+    app.listen port, "0.0.0.0"
 
 startWatcher = ->
-	require "./watcher"
+  require "./watcher"
 
 startWatcher()
 startServer()
