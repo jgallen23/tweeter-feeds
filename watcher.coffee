@@ -3,10 +3,7 @@ twitter = require "./node-twitter"
 mongodb = require('mongodb')
 TweetDb = require("./tweetdb")
 
-t = new twitter consumer_key: process.env.TWITTER_CONSUMER_KEY,
-	consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-	access_token_key: process.env.TWITTER_OATH_TOKEN,
-	access_token_secret: process.env.TWITTER_OATH_SECRET
+t = new twitter consumer_key: process.env.TWITTER_CONSUMER_KEY, consumer_secret: process.env.TWITTER_CONSUMER_SECRET, access_token_key: process.env.TWITTER_OATH_TOKEN, access_token_secret: process.env.TWITTER_OATH_SECRET
 
 friends = null
 db = new TweetDb
@@ -61,6 +58,7 @@ getLists = (user, cb) ->
 			console.log "error", lists
 			return
 		for list, i in lists
+			console.log list.name
 			ulist = owner: user, id: list.id, name: list.name, users: []
 			getMembers ulist
 
