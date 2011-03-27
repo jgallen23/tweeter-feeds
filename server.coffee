@@ -33,6 +33,7 @@ startServer = ->
 		res.end "Hi"
 
 	app.all "/hub", (req, res) ->
+		console.log req.rawBody
 		sub = nub.subscribe req.rawBody
 		console.log sub
 		sub.check_verification (err, resp) ->
