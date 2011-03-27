@@ -2,6 +2,7 @@ rss(version="2.0")
   channel
     title #{user} - #{listName}
     link= "http://tweeterfeeds.com"
+    link(rel="hub",href="http://jga.no.de/hub")
     - tweets.forEach(function(tweet) {
       item 
         pubDate= tweet.created

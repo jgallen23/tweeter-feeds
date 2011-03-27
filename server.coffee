@@ -32,6 +32,23 @@ startServer = ->
 	app.get "/", (req, res) ->
 		res.end "Hi"
 
+	app.all "/hub", (req, res) ->
+		sub = nub.subscribe req.rawBody
+		console.log sub
+		sub.check_verification (err, resp) ->
+			if err
+				console.log "HUB: Error with validation: #{err}"
+			else
+				console.log "HUB: Success"
+
+			return
+			sub.publish [{abc: 1}], {format: 'json'}, (err, resp) ->
+				if err
+					console.log "SERVER: Error with publishing:"
+					console.log err
+				else
+					console.log "SERVER: Publishing successful!"
+
 	app.get "/:user", (req, res) ->
 		user = req.params.user
 		db.getLists user, (results) ->
@@ -52,22 +69,6 @@ startServer = ->
 		db.getTweetsFromList user, listId, (list, results) ->
 			res.render "feed.jade", user: user, tweets: results, listName: list.name
 
-	app.all "/hub", (req, res) ->
-		sub = nub.subscribe req.rawBody
-		console.log sub
-		sub.check_verification (err, resp) ->
-			if err
-				console.log "HUB: Error with validation: #{err}"
-			else
-				console.log "HUB: Success"
-
-			return
-			sub.publish [{abc: 1}], {format: 'json'}, (err, resp) ->
-				if err
-					console.log "SERVER: Error with publishing:"
-					console.log err
-				else
-					console.log "SERVER: Publishing successful!"
 
 	db = new TweetDb
 	db.on "ready", ->
