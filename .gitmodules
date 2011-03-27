@@ -1,3 +1,6 @@
 [submodule "node-twitter"]
 	path = node-twitter
 	url = https://github.com/jgallen23/node-twitter.git
+[submodule "nubnub"]
+	path = nubnub
+	url = https://github.com/jgallen23/nubnub.git

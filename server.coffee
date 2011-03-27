@@ -1,4 +1,5 @@
 startServer = ->
+	nub = require "./nubnub/src/server"
 	express = require "express"
 	TweetDb = require "./tweetdb"
 	app = express.createServer()
@@ -50,6 +51,23 @@ startServer = ->
 		listId = parseInt req.params.listId, 10
 		db.getTweetsFromList user, listId, (list, results) ->
 			res.render "feed.jade", user: user, tweets: results, listName: list.name
+
+	app.all "/hub", (req, res) ->
+		sub = nub.subscribe req.rawBody
+		console.log sub
+		sub.check_verification (err, resp) ->
+			if err
+				console.log "HUB: Error with validation: #{err}"
+			else
+				console.log "HUB: Success"
+
+			return
+			sub.publish [{abc: 1}], {format: 'json'}, (err, resp) ->
+				if err
+					console.log "SERVER: Error with publishing:"
+					console.log err
+				else
+					console.log "SERVER: Publishing successful!"
 
 	db = new TweetDb
 	db.on "ready", ->
