@@ -1,0 +1,11 @@
+!!!5
+html
+  head
+    style
+      li { padding: 4px 0; }
+  body
+    ul
+    - tweets.forEach(function(tweet) {
+      li #{tweet.user_screen_name}: !{urlize(tweet.text)}
+    - });
+

@@ -56,9 +56,14 @@ startServer = ->
     db.getLists user, (results) ->
       res.render "lists.jade", user: user, lists: results
 
+  app.get "/lists/:user", (req, res) ->
+    user = req.params.user
+    db.getTweets 300, (results) ->
+      res.render "list.jade", user: user, tweets: results, listName: 'All Tweets'
+
   app.get "/feeds/:user", (req, res) ->
     user = req.params.user
-    db.getTweets 40, (results) ->
+    db.getTweets 300, (results) ->
       res.render "feed.jade", user: user, tweets: results, listName: 'All Tweets'
 
 
