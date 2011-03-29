@@ -17,7 +17,7 @@ startServer = ->
 
     app.helpers {
       urlize: (str) ->
-        str = str.replace /(http:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
+        str = str.replace /(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
         return str
       }
 

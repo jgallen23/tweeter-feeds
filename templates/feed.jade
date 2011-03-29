@@ -12,7 +12,7 @@ rss(version="2.0")
             #{tweet.user_screen_name}: !{urlize(tweet.text)}
         description
           :cdata
-            <div style="float: left; margin-right: 10px; width: 80px; text-align: center;">
+            <div style="float: left; margin-right: 10px; width: 120px; text-align: center; overflow: hidden;">
               <img src="#{tweet.user_avatar}" width="48" />
               <p>#{tweet.user_screen_name}</p>
             </div>
