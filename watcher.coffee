@@ -2,6 +2,7 @@ sys = require "sys"
 twitter = require "./node-twitter"
 mongodb = require('mongodb')
 TweetDb = require("./tweetdb")
+dateFormat = require 'dateformat'
 
 t = new twitter consumer_key: process.env.TWITTER_CONSUMER_KEY, consumer_secret: process.env.TWITTER_CONSUMER_SECRET, access_token_key: process.env.TWITTER_OATH_TOKEN, access_token_secret: process.env.TWITTER_OATH_SECRET
 
@@ -12,7 +13,8 @@ watchStream = ->
   console.log "Start Watching Stream"
 
   printTweet = (tweet) ->
-    console.log "New Tweet: #{ tweet.user.screen_name }: #{ tweet.text }"
+    d = dateFormat new Date, "mm/dd | h:MM:ss TT"
+    console.log "[ #{ d } ] New Tweet: #{ tweet.user.screen_name }: #{ tweet.text }"
 
   addTweet = (tweet) ->
     #partOfList = false
