@@ -18,6 +18,7 @@ startServer = ->
     app.helpers {
       urlize: (str) ->
         str = str.replace /(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
+        str = str.replace />http:\/\/twitpic.com\/(.*?)</, "><img src='http://twitpic.com/show/thumb/$1' /><"
         return str
       }
 
