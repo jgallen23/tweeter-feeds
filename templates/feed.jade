@@ -15,7 +15,7 @@ rss(version="2.0")
           :cdata
             <div style="float: left; margin-right: 10px; width: 120px; text-align: center; overflow: hidden;">
               <img src="#{tweet.user_avatar}" width="48" />
-              <p>#{tweet.user_screen_name}</p>
+              <p><a href="http://twitter.com/#!/#{ tweet.user_screen_name }">#{tweet.user_screen_name}</a></p>
             </div>
             <div>
               <p style="font-size: 18px;">!{urlize(tweet.text)}</p>
