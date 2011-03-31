@@ -2,6 +2,7 @@ startServer = ->
   nub = require "./nubnub/src/server"
   express = require "express"
   TweetDb = require "./tweetdb"
+  dateFormat = require 'dateformat'
   app = express.createServer()
   db = null
   port = 80
@@ -20,7 +21,14 @@ startServer = ->
         str = str.replace /(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
         str = str.replace />http:\/\/twitpic.com\/(.*?)</, "><img src='http://twitpic.com/show/thumb/$1' /><"
         return str
+      dateFormat: (date, offset) ->
+        #d = new Date
+        #utc = g.getTime() + (d.getTimezoneOffset() * 60000)
+        #nd = new Date(utc + (3600000 * offset))
+        return dateFormat date, "dddd, mmmm dS, h:MM:ss TT Z"
       }
+
+      
 
 
   app.configure "development", ->
