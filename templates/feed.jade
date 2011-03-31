@@ -19,6 +19,6 @@ rss(version="2.0")
             </div>
             <div>
               <p style="font-size: 18px;">!{urlize(tweet.text)}</p>
-              <p>#{dateFormat(tweet.created)}</p>
+              <p>#{dateFormat(tweet.created, "-7")}</p>
             </div>
     - })
