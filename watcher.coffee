@@ -17,7 +17,7 @@ watchStream = ->
     date = new Date
     utc = date.getTime() + (date.getTimezoneOffset() * 60000)
     nd = new Date(utc + (3600000 * offset))
-    d = dateFormat new Date, "mm/dd | h:MM:ss TT"
+    d = dateFormat nd, "mm/dd | h:MM:ss TT"
     console.log "[ #{ d } ] New Tweet: #{ tweet.user.screen_name }: #{ tweet.text }"
 
   addTweet = (tweet) ->
