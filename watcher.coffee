@@ -41,6 +41,9 @@ watchStream = ->
     stream.on "error", (error) ->
       console.log error
 
+    stream.on "end", ->
+      console.log "STREAM END"
+
 
 getLists = (user, cb) ->
   console.log "Getting user lists"
