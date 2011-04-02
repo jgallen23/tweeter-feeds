@@ -17,9 +17,10 @@ startServer = ->
     app.set "view options", { layout: false }
 
     app.helpers {
-      urlize: (str) ->
+      urlize: (str, images = true) ->
         str = str.replace /(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
-        str = str.replace />http:\/\/twitpic.com\/(.*?)</, "><img src='http://twitpic.com/show/thumb/$1' /><"
+        if images
+          str = str.replace />http:\/\/twitpic.com\/(.*?)</, "><img src='http://twitpic.com/show/thumb/$1' /><"
         return str
       dateFormat: (date, offset) ->
         utc = date.getTime() + (date.getTimezoneOffset() * 60000)
@@ -107,6 +108,6 @@ startReaderRefresher = ->
   
 
 
-#startTweetWatcher()
-#startServer()
+startTweetWatcher()
+startServer()
 startReaderRefresher()
