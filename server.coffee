@@ -96,6 +96,9 @@ startTweetWatcher = ->
 startReaderRefresher = ->
   GoogleReader = require "./reader"
   reader = new GoogleReader
+  if !process.env.GOOGLEREADER_EMAIL
+    console.log "set GOOGLEREADER_EMAIL and GOOGLEREADER_PASS"
+    return
   check = ->
     reader.login process.env.GOOGLEREADER_EMAIL, process.env.GOOGLEREADER_PASS, ->
       #@unreadCount (counts) ->
@@ -104,9 +107,7 @@ startReaderRefresher = ->
       @getFeed "http://jga.no.de/feeds/jgallen23", (data) ->
         #console.log data
   setInterval check, 60 * 60 * 1000 #1 hour
-  check()
-  
-
+  setTimeout check, 60 * 1000
 
 startTweetWatcher()
 startServer()
