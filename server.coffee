@@ -89,8 +89,24 @@ startServer = ->
   db.on "ready", ->
     app.listen port, "0.0.0.0"
 
-startWatcher = ->
+startTweetWatcher = ->
   require "./watcher"
 
-startWatcher()
-startServer()
+startReaderRefresher = ->
+  GoogleReader = require "./reader"
+  reader = new GoogleReader
+  check = ->
+    reader.login process.env.GOOGLEREADER_EMAIL, process.env.GOOGLEREADER_PASS, ->
+      #@unreadCount (counts) ->
+        #console.log counts
+      console.log "Refresh Google Reader Feed"
+      @getFeed "http://jga.no.de/feeds/jgallen23", (data) ->
+        #console.log data
+  setInterval check, 60 * 60 * 1000 #1 hour
+  check()
+  
+
+
+#startTweetWatcher()
+#startServer()
+startReaderRefresher()
