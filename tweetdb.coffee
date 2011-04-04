@@ -13,7 +13,7 @@ class TweetDb extends EventEmitter
       _id: tweet.id
       text: tweet.text
       created: new Date(tweet.created_at)
-      user_name: tweet.user.name
+      user_name: if tweet.user.name then tweet.user.name else ""
       user_screen_name: tweet.user.screen_name
       user_id: tweet.user.id
       user_avatar: tweet.user.profile_image_url

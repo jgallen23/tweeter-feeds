@@ -20,7 +20,7 @@ startServer = ->
       urlize: (str, images = true) ->
         str = str.replace /(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> "
         if images
-          str = str.replace />http:\/\/twitpic.com\/(.*?)</, "><img src='http://twitpic.com/show/thumb/$1' /><"
+          str = str.replace />http:\/\/twitpic.com\/(.*?)</, "><img style='display: block' src='http://twitpic.com/show/thumb/$1' /><"
         return str
       dateFormat: (date, offset) ->
         utc = date.getTime() + (date.getTimezoneOffset() * 60000)
