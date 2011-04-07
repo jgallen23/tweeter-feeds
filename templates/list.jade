@@ -6,6 +6,6 @@ html
   body
     ul
     - tweets.forEach(function(tweet) {
-      li #{tweet.user_screen_name}: !{urlize(tweet.text)}
+      li [#{dateFormat(tweet.created, "-7")}] #{tweet.user_screen_name}: !{urlize(tweet.text)}
     - });
 

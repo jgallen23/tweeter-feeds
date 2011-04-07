@@ -74,14 +74,29 @@ getLists = (user, cb) ->
 
 getHomeTimeline = (cb) ->
   console.log "Saving timeline"
+  page = 1
+  tweetCount = 0
+  id = null
   saveTimeline = (timeline) ->
     for tweet in timeline
       db.addTweet tweet
 
-  t.getHomeTimeline { count: 200 }, saveTimeline
+    if timeline.length != 0
+      tweetCount += timeline.length
+      getTimeline(page++)
+    else
+      console.log "Tweets added: #{ tweetCount }"
+
+  getTimeline = (page) ->
+    t.getHomeTimeline { since_id: id, count: 200, page: page }, saveTimeline
+
+  db.getLastTweet (tweet) ->
+    id = parseInt(tweet._id, 10)
+    getTimeline(page)
+    
 
 db.on "ready", ->
-  getLists "jgallen23"
+  #getLists "jgallen23"
   getHomeTimeline()
   watchStream()
   

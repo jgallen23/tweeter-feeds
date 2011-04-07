@@ -5,8 +5,11 @@ class TweetDb extends EventEmitter
   constructor: () ->
     @db = new mongodb.Db "tweeterfeeds", new mongodb.Server "127.0.0.1", 27017
     @db.open (error, client) =>
-      @client = client
-      @emit "ready"
+      if !error
+        @client = client
+        @emit "ready"
+      else
+        console.log error.message
 
   addTweet: (tweet) ->
     data =
@@ -30,6 +33,13 @@ class TweetDb extends EventEmitter
     collection.find { owner: name }, (err, cursor) ->
       cursor.toArray (err, results) ->
         cb results
+
+  getLastTweet: (cb) ->
+    collection = new mongodb.Collection @client, "tweets"
+    collection.find {}, { limit: 1, sort: [['created', 'desc']] }, (err, cursor) ->
+      cursor.toArray (err, results) ->
+        cb results[0]
+
   getTweets: (limit, cb) ->
     if !limit
       limit = 40
