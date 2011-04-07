@@ -78,14 +78,17 @@ getHomeTimeline = (cb) ->
   tweetCount = 0
   id = null
   saveTimeline = (timeline) ->
-    for tweet in timeline
-      db.addTweet tweet
+    if timeline instanceof Array
+      for tweet in timeline
+        db.addTweet tweet
 
-    if timeline.length != 0
-      tweetCount += timeline.length
-      getTimeline(page++)
+      if timeline.length != 0
+        tweetCount += timeline.length
+        getTimeline(page++)
+      else
+        console.log "Tweets added: #{ tweetCount }"
     else
-      console.log "Tweets added: #{ tweetCount }"
+      console.log timeline
 
   getTimeline = (page) ->
     t.getHomeTimeline { since_id: id, count: 200, page: page }, saveTimeline
