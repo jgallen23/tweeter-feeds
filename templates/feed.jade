@@ -9,7 +9,7 @@ rss(version="2.0")
         guid tweeterfeeds,#{user},#{listName},#{tweet._id}
         title 
           :cdata
-            #{tweet.user_screen_name}: !{urlize(tweet.text, false)}
+            #{tweet.user_screen_name}: !{tweet.text}
         link http://twitter.com/#!/#{ tweet.user_screen_name }/status/#{ tweet._id }
         description
           :cdata
