@@ -10,7 +10,7 @@ rss(version="2.0")
         title 
           :cdata
             #{tweet.user_screen_name}: !{tweet.text}
-        link http://twitter.com/#!/#{ tweet.user_screen_name }/status/#{ tweet._id }
+        link http://twitter.com/#{ tweet.user_screen_name }/status/#{ tweet._id }
         description
           :cdata
             <div style="float: left; margin-right: 10px; width: 120px; text-align: center; overflow: hidden;">
