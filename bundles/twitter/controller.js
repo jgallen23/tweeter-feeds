@@ -2,6 +2,7 @@ var sys = require('sys');
 var config = require('confi').load();
 var OAuth = require('oauth').OAuth;
 var User = require('./models/user');
+var urls = require('../../urls');
 
 module.exports = function(app, namespace) {
  var oa = new OAuth(
@@ -43,7 +44,7 @@ module.exports = function(app, namespace) {
              function(err, user) {
                req.session.screenName = user.screenName;
                req.session.userId = user._id.toString();
-               res.redirect("/profile/");
+               res.redirect(urls.profile());
              });
          }  
        });  
@@ -55,6 +56,8 @@ module.exports = function(app, namespace) {
    var id = req.session.userId;
    if (id) {
     res.render('profile'); 
+   } else {
+     res.redirect(urls.homepage());
    }
  });
 };

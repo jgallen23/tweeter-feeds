@@ -36,7 +36,8 @@ app.configure(function() {
       var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
       var nd = new Date(utc + (3600000 * offset));
       return dateFormat(nd, "dddd, mmmm dS, h:MM:ss TT");
-    }
+    },
+    urls: require('./urls')
   });
   app.dynamicHelpers({
     session: function(req, res) {
@@ -49,15 +50,10 @@ app.configure(function() {
     layout: false 
   });
   app.set("view engine", "jade");
-});
-app.configure("development", function() {
   app.use(express.errorHandler({
     dumpExceptions: true,
     showStack: true
   }));
-});
-app.configure("production", function() {
-  app.use(express.errorHandler());
 });
 
 app.get("/", function(req, res) {

@@ -1,4 +1,4 @@
-conf/default.json
+conf/*.json
 config.coffee
 .DS_Store
 node_modules

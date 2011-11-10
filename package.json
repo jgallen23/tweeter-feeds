@@ -12,6 +12,7 @@
     "optimist": "*",
     "relative-date": "*",
     "resistance": "*",
+    "str.js": "*",
 		"winston": "*"
   }
 }

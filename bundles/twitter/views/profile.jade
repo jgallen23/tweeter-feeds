@@ -1,3 +1,3 @@
 p= session.screenName
-p: a(href="/feed/#{session.userId}") Feed
-p: a(href="/list/#{session.userId}") Feed (html)
+p: a(href=urls.rssFeed(session.userId)) Feed
+p: a(href=urls.htmlFeed(session.userId)) Feed (html)

@@ -3,8 +3,8 @@ var GoogleReader = require('./reader');
 var User = require('../twitter/models/user');
 var winston = require('winston');
 var config = require('confi').load();
+var urls = require('../../urls');
 
-var config = require('confi').load();
 mongoose.connect(config.mongo);
 var reader = null;
 
@@ -17,7 +17,7 @@ var refreshAll = function() {
   User.find({}, function(err, users) {
     for (var i = 0, c = users.length; i < c; i++) {
       var user = users[i];
-      var feedUrl = config.host+"/feed/_user/"+user.screenName;
+      var feedUrl = config.host+urls.rssFeed(user);
       refreshFeed(feedUrl);
     }
   });
