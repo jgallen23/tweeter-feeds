@@ -11,16 +11,16 @@ var bundle = require("express-bundle").use(app, {
   bundlesDir: 'bundles'
 });
 
-var dbUrl = 'mongodb://localhost/tweeter-feeds';
-mongoose.connect(dbUrl);
 
 var config = require('confi').load();
+mongoose.connect(config.mongo);
 
 app.configure(function() {
-  //app.use(express.logger());
+  app.use(express.logger());
   app.use(express.methodOverride());
   app.use(express.bodyParser());
   app.use(express.cookieParser());
+  app.use(express.session({ secret: 'twwwwwwweeet' }));
 
   app.helpers({
     inProduction: (process.env.NODE_ENV === 'production'),
@@ -36,6 +36,11 @@ app.configure(function() {
       var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
       var nd = new Date(utc + (3600000 * offset));
       return dateFormat(nd, "dddd, mmmm dS, h:MM:ss TT");
+    }
+  });
+  app.dynamicHelpers({
+    session: function(req, res) {
+      return req.session;
     }
   });
   app.set("views", "" + __dirname + "/views");
@@ -55,10 +60,16 @@ app.configure("production", function() {
   app.use(express.errorHandler());
 });
 
+app.get("/", function(req, res) {
+  res.render('homepage');
+});
+
 bundle.register('feed');
+bundle.register('twitter');
 
 //watcher
 require('./bundles/twitter/watcher');
+require('./bundles/reader-refresh');
 
 console.log("Server started on port "+port);
 app.listen(port, "0.0.0.0");
