@@ -1,1 +1,7 @@
+conf/default.json
 config.coffee
+.DS_Store
+node_modules
+.monitor
+.nodemonignore
+old

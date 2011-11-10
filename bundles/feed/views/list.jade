@@ -1,0 +1,10 @@
+!!!5
+html
+  head
+    style
+      li { padding: 4px 0; }
+  body
+    ul
+      for tweet in tweets
+        li [#{relativeDate(tweet.created)}] #{tweet.user.screenName}: !{urlize(tweet.text)}
+

@@ -1,0 +1,20 @@
+!!! xml
+rss(version="2.0")
+  channel
+    title #{user} - #{listName}
+    for tweet in tweets
+      item 
+        pubDate= tweet.created
+        guid http://tweeterfeeds.com/#{user}/#{tweet._id}
+        title Tweet by #{tweet.user.screenName}
+        link http://twitter.com/#{ tweet.user.screenName }/status/#{ tweet.tweetId }
+        description
+          :cdata
+            <div style="float: left; margin-right: 10px; width: 120px; text-align: center; overflow: hidden;">
+              <img src="#{tweet.user.avatar}" width="48" />
+              <p><a target="_blank" href="http://twitter.com/#!/#{ tweet.user.screenName }">#{tweet.user.screenName}</a></p>
+            </div>
+            <div>
+              <p style="font-size: 18px;">!{urlize(tweet.text)}</p>
+              <p>#{dateFormat(tweet.created, "-7")}</p>
+            </div>

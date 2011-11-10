@@ -1,0 +1,18 @@
+{
+  "name": "tweeter-feeds",
+  "version": "0.0.2",
+  "dependencies": {
+    "confi": "*",
+		"dateformat": "*",
+    "express": "*",
+    "express-bundle": "*",
+    "jade": "*",
+    "mongoose": "*",
+		"oauth": "*",
+    "optimist": "*",
+    "relative-date": "*",
+    "resistance": "*",
+		"winston": "*"
+  }
+}
+
