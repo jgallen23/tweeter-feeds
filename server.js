@@ -1,3 +1,4 @@
+var winston = require('winston');
 var express = require("express");
 var path = require("path");
 var mongoose = require('mongoose');
@@ -11,7 +12,7 @@ var bundle = require("express-bundle").use(app, {
   bundlesDir: 'bundles'
 });
 
-
+winston.default.transports.console.timestamp = true;
 var config = require('confi').load();
 mongoose.connect(config.mongo);
 
