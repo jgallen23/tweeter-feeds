@@ -22,6 +22,8 @@ Tweet.index({ created: -1 });
 Tweet.statics = {
   addTweet: function(t, timelineUser) {
     //console.log(t);
+    if (!t.user)
+      console.log(t);
     this.create({
       tweetId: t.id,
       timelineUser: timelineUser,

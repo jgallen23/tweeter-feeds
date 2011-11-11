@@ -5,16 +5,13 @@ rss(version="2.0")
     for tweet in tweets
       item 
         pubDate= tweet.created
-        guid http://tweeterfeeds.com/#{user}/#{tweet._id}
-        title Tweet by #{tweet.user.screenName}
+        guid tweeterfeeds-#{user}-#{listName}-#{tweet._id}
+        title #{tweet.user.screenName}
         link http://twitter.com/#{ tweet.user.screenName }/status/#{ tweet.tweetId }
         description
           :cdata
-            <div style="float: left; margin-right: 10px; width: 120px; text-align: center; overflow: hidden;">
-              <img src="#{tweet.user.avatar}" width="48" />
-              <p><a target="_blank" href="http://twitter.com/#!/#{ tweet.user.screenName }">#{tweet.user.screenName}</a></p>
-            </div>
-            <div>
-              <p style="font-size: 18px;">!{urlize(tweet.text)}</p>
+            <div style="float:left; width: 460px; margin-right: 20px;">
+              <p style="font-size: 18px; margin: 0 0 10px 0">!{urlize(tweet.text)}</p>
               <p>#{dateFormat(tweet.created, "-7")}</p>
             </div>
+            <img src="#{tweet.user.avatar}" width="48" />
