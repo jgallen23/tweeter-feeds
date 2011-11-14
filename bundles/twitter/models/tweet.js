@@ -42,7 +42,9 @@ Tweet.statics = {
     this.find({ timelineUser: timelineUser }).limit(limit).desc('created').run(callback);
   },
   findLatest: function(timelineUser, callback) {
-    this.findOne({ timelineUser: timelineUser }).desc('created').run(callback);
+    this.find({ timelineUser: timelineUser }).limit(1).desc('created').run(function(err, tweets) {
+      callback(err, tweets[0]);
+    });
   }
 };
 

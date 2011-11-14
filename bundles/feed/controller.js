@@ -6,8 +6,9 @@ module.exports = function(app, namespace) {
   app.get('/feed/:id.:format', function(req, res) {
     var id = req.params.id;
     var format = req.params.format;
+    var l = req.query.limit || limit;
     User.findById(id, function(err, user) {
-      Tweet.findByUser(user, limit, function(err, tweets) {
+      Tweet.findByUser(user, l, function(err, tweets) {
         if (format == "rss")
           res.contentType('text/xml');
         res.render(format, {

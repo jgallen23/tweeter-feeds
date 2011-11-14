@@ -44,6 +44,7 @@ var watch = function(user) {
     var saveTimeline = function(timeline) {
       winston.info('Watcher: Save Timeline');
       if (timeline instanceof Array) {
+        winston.info('Watcher: Timline Fetched '+timeline.length+' Tweets');
         for (var i = 0, c = timeline.length; i < c; i++) {
           var tweet = timeline[i];
           Tweet.addTweet(tweet, user);
@@ -65,7 +66,7 @@ var watch = function(user) {
         page: page
       };
       if (lastId)
-        req.since_id = lastId.toString();
+        req.since_id = parseInt(lastId.toString(), 10);
       winston.info('Watcher: Fetching Timeline '+page);
       twit.getHomeTimeline(req, saveTimeline);
     };
@@ -86,6 +87,7 @@ var watch = function(user) {
 User.find({}, function(err, users) {
   for (var i = 0, c = users.length; i < c; i++) {
     var user = users[i];
+    winston.info('Watcher: Watching User: '+user.screenName+' ('+user._id.toString()+')');
     watch(user);
   }
 });
