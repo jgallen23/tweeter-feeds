@@ -6,7 +6,7 @@ var relativeDate = require('relative-date');
 var argv = require('optimist').argv;
 var dateFormat = require('dateformat');
 var app = express.createServer();
-var port = argv.port || 3000;
+var port = argv.port || 80;
 
 var bundle = require("express-bundle").use(app, {
   bundlesDir: 'bundles'
