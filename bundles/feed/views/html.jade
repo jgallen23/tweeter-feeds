@@ -6,5 +6,5 @@ html
   body
     ul
       for tweet in tweets
-        li [#{relativeDate(tweet.created)}] #{tweet.user.screenName}: !{urlize(tweet.text)}
+        li [#{relativeDate(tweet.created)}] #{tweet.user.screenName}: !{urlize(tweet.text, true)}
 

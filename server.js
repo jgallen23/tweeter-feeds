@@ -28,7 +28,7 @@ app.configure(function() {
     config: config,
     relativeDate: relativeDate,
     urlize: function(str, images) {
-      str = str.replace(/(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a>");
+      str = str.replace(/(https?:.*?)($| )/g, "<a href='$1' target='_blank'>$1</a> ");
       if (images)
         str = str.replace(/>http:\/\/twitpic.com\/(.*?)</, "><img style='display: block' src='http://twitpic.com/show/thumb/$1' /><");
       return str;

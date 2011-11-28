@@ -63,6 +63,7 @@ var watch = function(user) {
     var fetchTimeline = function() {
       var req = {
         count: 200,
+        include_entities: 1,
         page: page
       };
       if (lastId)

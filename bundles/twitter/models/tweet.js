@@ -19,15 +19,30 @@ var Tweet = new Schema({
 Tweet.index({ tweetId: -1, timelineUser: -1 }, { unique: true });
 Tweet.index({ created: -1 });
 
+var parseEntities = function(tweet) {
+  if (!tweet.entities)
+    return tweet.text;
+  var replace = function(text, start, stop, replace) {
+    return text.replace(text.substr(start, stop-start), replace);
+  };
+  var text = tweet.text;
+  for (var i = 0, c = tweet.entities.urls.length; i < c; i++) {
+    var url = tweet.entities.urls[i];
+    text = replace(text, url.indices[0], url.indices[1], url.expanded_url || url.display_url || url.url);
+  }
+  return text;
+};
+
 Tweet.statics = {
   addTweet: function(t, timelineUser) {
     //console.log(t);
     if (!t.user)
       console.log(t);
+    console.log(t.entities);
     this.create({
       tweetId: t.id,
       timelineUser: timelineUser,
-      text: t.text,
+      text: parseEntities(t),
       created: new Date(t.created_at),
       user: {
         name: t.user.name,
