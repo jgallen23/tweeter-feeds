@@ -2,7 +2,7 @@ var User = require('../twitter/models/user');
 var Tweet = require('../twitter/models/tweet');
 
 module.exports = function(app, namespace) {
-  var limit = 100;
+  var limit = 300;
   app.get('/feed/:id.:format', function(req, res) {
     var id = req.params.id;
     var format = req.params.format;
