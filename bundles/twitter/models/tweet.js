@@ -6,7 +6,7 @@ var ObjectId = Schema.ObjectId;
 
 var Tweet = new Schema({
   text: String,
-  tweetId: { type: Number },
+  tweetId: String,
   timelineUser: { type: ObjectId, ref: 'twitterUser' },
   created: Date,
   user: {
@@ -40,7 +40,7 @@ Tweet.statics = {
       console.log(t);
     console.log(t.entities);
     this.create({
-      tweetId: t.id,
+      tweetId: t.id_str,
       timelineUser: timelineUser,
       text: parseEntities(t),
       created: new Date(t.created_at),
