@@ -14,7 +14,9 @@ module.exports = {
   login: function() {
     return "/auth/twitter/";
   },
-  profile: function() {
+  profile: function(user) {
+    if (user)
+      return "/profile/"+user._id.toString();
     return "/profile/";
   }
 };

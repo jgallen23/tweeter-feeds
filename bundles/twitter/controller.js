@@ -52,12 +52,24 @@ module.exports = function(app, namespace) {
    });
  });
 
- app.get('/profile/', function(req, res) {
-   var id = req.session.userId;
+ app.get('/profile/?:id', function(req, res) {
+   var id = req.params.id || req.session.userId;
    if (id) {
-    res.render('profile'); 
+     User.findById(id, function(err, user) {
+      res.render('profile', {
+        user: user
+      }); 
+     });
    } else {
      res.redirect(urls.homepage());
    }
+ });
+
+ app.get('/users/', function(req, res) {
+   User.find({}, function(err, users) {
+     res.render('users', {
+       users: users
+     });
+   });   
  });
 };
