@@ -13,6 +13,7 @@
     "relative-date": "*",
     "resistance": "*",
     "str.js": "*",
+    "twitter": "*",
 		"winston": "*"
   }
 }
