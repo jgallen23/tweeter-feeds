@@ -14,4 +14,4 @@ rss(version="2.0")
               <p style="font-size: 18px; margin: 0 0 10px 0">!{urlize(tweet.text)}</p>
               <p>#{dateFormat(tweet.created, "-7")}</p>
             </div>
-            <img src="#{tweet.user.avatar}" width="48" />
+            <a href="http://www.twitter.com/#{tweet.user.screenName}"><img src="#{tweet.user.avatar}" width="48" /></a>
