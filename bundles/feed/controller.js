@@ -8,15 +8,19 @@ module.exports = function(app, namespace) {
     var format = req.params.format;
     var l = req.query.limit || limit;
     User.findById(id, function(err, user) {
-      Tweet.findByUser(user, l, function(err, tweets) {
-        if (format == "rss")
-          res.contentType('text/xml');
-        res.render(format, {
-          user: user.screenName,
-          tweets: tweets,
-          listName: 'All Tweets'
+      if (!err) {
+        Tweet.findByUser(user, l, function(err, tweets) {
+          if (format == "rss")
+            res.contentType('text/xml');
+          res.render(format, {
+            user: user.screenName,
+            tweets: tweets,
+            listName: 'All Tweets'
+          });
         });
-      });
+      } else {
+        console.log(err);
+      }
     });
   });
 };
