@@ -36,9 +36,11 @@ var parseEntities = function(tweet) {
 Tweet.statics = {
   addTweet: function(t, timelineUser) {
     //console.log(t);
-    if (!t.user)
+    if (!t.user) {
       console.log(t);
-    console.log(t.entities);
+      return;
+    }
+    //console.log(t.entities);
     this.create({
       tweetId: t.id_str,
       timelineUser: timelineUser,
