@@ -39,6 +39,7 @@ var watch = function(user) {
   var getTimeline = function(callback) {
     winston.info('Watcher: Get Timeline');
     var page = 1;
+    var maxPages = 3;
     var lastId = null;
     var tweetsAdded = 0;
     var saveTimeline = function(timeline) {
@@ -50,7 +51,7 @@ var watch = function(user) {
           Tweet.addTweet(tweet, user);
         }
         tweetsAdded += timeline.length;
-        if (lastId && timeline.length !== 0) {
+        if (lastId && timeline.length !== 0 && maxPages != page) {
           fetchTimeline(++page);
         } else {
           winston.info('Watcher: Timeline Fetch Complete', { tweets: tweetsAdded });

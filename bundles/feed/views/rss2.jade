@@ -1,0 +1,17 @@
+!!! xml
+rss(version="2.0")
+  channel
+    title #{user} - #{listName}
+    for tweet in tweets
+      item 
+        pubDate= tweet.created
+        guid tweeterfeeds-#{user}-#{listName}-#{tweet._id}
+        title #{tweet.user.screenName}: #{tweet.text}
+        link http://twitter.com/#{ tweet.user.screenName }/status/#{ tweet.tweetId }
+        description
+          :cdata
+            <div style="float:left; width: 460px; margin-right: 20px;">
+              <p style="font-size: 18px; margin: 0 0 10px 0">!{urlize(tweet.text)}</p>
+              <p>#{dateFormat(tweet.created, "-7")}</p>
+            </div>
+            <a href="http://www.twitter.com/#{tweet.user.screenName}"><img src="#{tweet.user.avatar}" width="48" /></a>
