@@ -5,7 +5,7 @@
     "confi": "*",
 		"dateformat": "*",
     "express": "*",
-    "express-bundle": "0.0.2",
+    "express-bundle": "0.0.4",
     "jade": "*",
     "mongoose": "*",
 		"oauth": "*",
